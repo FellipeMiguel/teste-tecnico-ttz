@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "América Senior",
-  description: "Gerenciador de OKRs",
+  description: "Gerenciamento de OKRs",
 };
 
 export default function RootLayout({ children }) {
