@@ -7,85 +7,86 @@ import CreateObjectiveModal from "./components/CreateObjectiveModal";
 import CreateKeyResultModal from "./components/CreateKeyResultModal";
 
 export default function Home() {
-  const [objectives, setObjectives] = useState([
-    {
-      id: 1,
-      title: "Melhorar satisfação do cliente",
-      percent: 37,
-      keyResults: [
-        {
-          title: "Aumentar o NPS de 60 para 80",
-          percent: 35,
-          deliveries: [
-            {
-              name: "Implementar pesquisas de sastifação pós-atendimento",
-              percent: 25,
-            },
-            {
-              name: "Criar um programa de fidelidade para clientes recorrentes",
-              percent: 10,
-            },
-          ],
-        },
-        {
-          title: "Aumentar o NPS de 60 para 80",
-          percent: 35,
-          deliveries: [
-            {
-              name: "Implementar pesquisas de sastifação pós-atendimento",
-              percent: 25,
-            },
-            {
-              name: "Criar um programa de fidelidade para clientes recorrentes",
-              percent: 10,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Melhorar satisfação do cliente",
-      percent: 37,
-      keyResults: [
-        {
-          title: "Aumentar o NPS de 60 para 80",
-          percent: 35,
-          deliveries: [
-            {
-              name: "Implementar pesquisas de sastifação pós-atendimento",
-              percent: 25,
-            },
-            {
-              name: "Criar um programa de fidelidade para clientes recorrentes",
-              percent: 10,
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+  const [objectives, setObjectives] = useState([]);
 
   const [isCreateObjectiveModalOpen, setIsCreateObjectiveModalOpen] =
     useState(false);
   const [isCreateKeyResultModalOpen, setIsCreateKeyResultModalOpen] =
     useState(false);
   const [selectedObjective, setSelectedObjective] = useState(null);
+  const [selectedKeyResult, setSelectedKeyResult] = useState(null);
 
-  const handleAddObjective = () => {
+  const calculateAveragePercent = (items) => {
+    if (items.length === 0) return 0;
+    const totalPercent = items.reduce((acc, item) => acc + item.percent, 0);
+    return (totalPercent / items.length).toFixed(1); // Arredondar para 1 casa decimal
+  };
+
+  const handleAddObjective = (newObjective) => {
+    setObjectives((prevObjectives) => [
+      ...prevObjectives,
+      { ...newObjective, id: prevObjectives.length + 1, keyResults: [] },
+    ]);
     setIsCreateObjectiveModalOpen(false);
   };
 
-  const handleAddKeyResult = (keyResult) => {
+  const handleAddKeyResult = (objective, keyResult) => {
+    const updatedKeyResult = {
+      ...keyResult,
+      percent: parseFloat(calculateAveragePercent(keyResult.deliveries)),
+    };
+    setObjectives((prevObjectives) =>
+      prevObjectives.map((obj) =>
+        obj.id === objective.id
+          ? {
+              ...obj,
+              keyResults: [...obj.keyResults, updatedKeyResult],
+            }
+          : obj
+      )
+    );
+    setIsCreateKeyResultModalOpen(false);
+    setSelectedObjective(null);
+  };
+
+  const handleEditKeyResult = (objective, keyResult) => {
+    setSelectedObjective(objective);
+    setSelectedKeyResult(keyResult);
+    setIsCreateKeyResultModalOpen(true);
+  };
+
+  const handleSaveKeyResult = (editedKeyResult) => {
+    const updatedKeyResult = {
+      ...editedKeyResult,
+      percent: parseFloat(calculateAveragePercent(editedKeyResult.deliveries)),
+    };
     setObjectives((prevObjectives) =>
       prevObjectives.map((objective) =>
         objective.id === selectedObjective.id
-          ? { ...objective, keyResults: [...objective.keyResults, keyResult] }
+          ? {
+              ...objective,
+              keyResults: objective.keyResults.map((keyResult) =>
+                keyResult === selectedKeyResult ? updatedKeyResult : keyResult
+              ),
+            }
           : objective
       )
     );
     setIsCreateKeyResultModalOpen(false);
     setSelectedObjective(null);
+    setSelectedKeyResult(null);
+  };
+
+  const handleDeleteObjective = (objectiveToDelete) => {
+    setObjectives((prevObjectives) =>
+      prevObjectives.filter(
+        (objective) => objective.id !== objectiveToDelete.id
+      )
+    );
+  };
+
+  const calculateObjectivePercent = (keyResults) => {
+    return parseFloat(calculateAveragePercent(keyResults));
   };
 
   return (
@@ -105,7 +106,15 @@ export default function Home() {
         <div className="mt-5 flex justify-between flex-wrap">
           {objectives.map((objective) => (
             <div key={objective.id} className="w-full md:w-[49%]">
-              <Panel objective={objective} />
+              <Panel
+                objective={{
+                  ...objective,
+                  percent: calculateObjectivePercent(objective.keyResults),
+                }}
+                onAddKeyResult={handleAddKeyResult}
+                onEditKeyResult={handleEditKeyResult}
+                onDeleteObjective={handleDeleteObjective}
+              />
             </div>
           ))}
         </div>
@@ -118,7 +127,8 @@ export default function Home() {
       <CreateKeyResultModal
         isOpen={isCreateKeyResultModalOpen}
         onClose={() => setIsCreateKeyResultModalOpen(false)}
-        onSave={handleAddKeyResult}
+        onSave={selectedKeyResult ? handleSaveKeyResult : handleAddKeyResult}
+        keyResult={selectedKeyResult}
       />
     </main>
   );

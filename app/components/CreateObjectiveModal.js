@@ -1,7 +1,13 @@
-// components/CreateObjectiveModal.js
-import React from "react";
+import React, { useState } from "react";
 
 const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
+  const [objectiveTitle, setObjectiveTitle] = useState("");
+
+  const handleSave = () => {
+    onSave({ title: objectiveTitle, percent: 0, keyResults: [] });
+    setObjectiveTitle("");
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -16,6 +22,8 @@ const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
             type="text"
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Digite o objetivo"
+            value={objectiveTitle}
+            onChange={(e) => setObjectiveTitle(e.target.value)}
           />
         </div>
         <div className="flex justify-end gap-3">
@@ -27,7 +35,7 @@ const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
           </button>
           <button
             className="bg-[#0094B5] hover:bg-[#007B99] text-white font-bold py-2 px-4 rounded"
-            onClick={onSave}
+            onClick={handleSave}
           >
             Salvar
           </button>

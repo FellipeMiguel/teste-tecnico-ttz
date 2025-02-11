@@ -21,9 +21,14 @@ const Delivery = ({ name, percent }) => (
   </li>
 );
 
-const KeyResult = ({ title, percent, deliveries }) => (
+const KeyResult = ({ title, percent, deliveries, onEdit }) => (
   <div className="mb-4">
-    <h2 className="font-bold mb-2">{title}</h2>
+    <div className="flex justify-between items-center">
+      <h2 className="font-bold mb-2">{title}</h2>
+      <button className="text-[#0094B5] hover:underline" onClick={onEdit}>
+        Editar
+      </button>
+    </div>
     <ProgressBar percent={percent} />
     <ul className="mt-2 flex flex-col gap-2">
       {deliveries.map((delivery, index) => (
@@ -34,19 +39,32 @@ const KeyResult = ({ title, percent, deliveries }) => (
   </div>
 );
 
-const Panel = ({ objective }) => {
+const Panel = ({
+  objective,
+  onAddKeyResult,
+  onEditKeyResult,
+  onDeleteObjective,
+}) => {
   const [isCreateKeyResultModalOpen, setIsCreateKeyResultModalOpen] =
     useState(false);
 
   const handleAddKeyResult = (keyResult) => {
-    // Lógica para adicionar o novo resultado-chave
+    onAddKeyResult(objective, keyResult);
     setIsCreateKeyResultModalOpen(false);
   };
 
   return (
     <div className="w-full">
       <div className="bg-white p-5 rounded-md shadow-sm ">
-        <h2 className="font-bold mb-2">{objective.title}</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="font-bold mb-2">{objective.title}</h2>
+          <button
+            className="text-red-500 hover:underline"
+            onClick={() => onDeleteObjective(objective)}
+          >
+            Delete
+          </button>
+        </div>
         <ProgressBar percent={objective.percent} />
         <div className="flex items-center justify-between py-3">
           <hr className="text-black w-[40%]" />
@@ -54,7 +72,11 @@ const Panel = ({ objective }) => {
           <hr className="text-black w-[40%]" />
         </div>
         {objective.keyResults.map((keyResult, index) => (
-          <KeyResult key={index} {...keyResult} />
+          <KeyResult
+            key={index}
+            {...keyResult}
+            onEdit={() => onEditKeyResult(objective, keyResult)}
+          />
         ))}
       </div>
       <div className="flex justify-end">
