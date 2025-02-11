@@ -35,7 +35,7 @@ const CreateKeyResultModal = ({
           ? value === ""
             ? ""
             : Math.max(0, Math.min(100, Number(value)))
-          : value; // Validar e converter percentagem
+          : value;
       updatedDeliveries[index] = {
         ...updatedDeliveries[index],
         [name]: newValue,
@@ -48,7 +48,7 @@ const CreateKeyResultModal = ({
     const validPercent =
       newDelivery.percent === ""
         ? ""
-        : Math.max(0, Math.min(100, Number(newDelivery.percent))); // Validar e converter percentagem
+        : Math.max(0, Math.min(100, Number(newDelivery.percent)));
     setKeyResult((prev) => ({
       ...prev,
       deliveries: [

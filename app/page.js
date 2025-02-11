@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react";
 import { useState } from "react";
 import { PageTitle } from "./components/PageTitle";
 import Panel from "./components/Panel";
@@ -19,7 +18,7 @@ export default function Home() {
   const calculateAveragePercent = (items) => {
     if (items.length === 0) return 0;
     const totalPercent = items.reduce((acc, item) => acc + item.percent, 0);
-    return (totalPercent / items.length).toFixed(1); // Arredondar para 1 casa decimal
+    return (totalPercent / items.length).toFixed(1);
   };
 
   const handleAddObjective = (newObjective) => {
