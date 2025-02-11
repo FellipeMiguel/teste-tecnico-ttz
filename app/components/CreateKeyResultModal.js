@@ -38,9 +38,6 @@ const CreateKeyResultModal = ({ isOpen, onClose, onSave }) => {
       <div className="bg-white p-5 rounded-md shadow-lg w-[90%] md:w-[50%] lg:w-[30%]">
         <h2 className="text-2xl font-bold mb-4">Criar Novo Resultado-Chave</h2>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Nome do Resultado-Chave
-          </label>
           <input
             type="text"
             name="title"
@@ -50,23 +47,8 @@ const CreateKeyResultModal = ({ isOpen, onClose, onSave }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Percentual
-          </label>
-          <input
-            type="number"
-            name="percent"
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Digite o percentual"
-            value={keyResult.percent}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Nome da Entrega
-          </label>
+
+        <div className="mb-4 flex gap-1">
           <input
             type="text"
             name="name"
@@ -75,23 +57,19 @@ const CreateKeyResultModal = ({ isOpen, onClose, onSave }) => {
             value={newDelivery.name}
             onChange={handleDeliveryChange}
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Percentual da Entrega
-          </label>
           <input
             type="number"
             name="percent"
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Digite o percentual"
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-1/3"
+            placeholder="Valor %"
             value={newDelivery.percent}
             onChange={handleDeliveryChange}
           />
+          <button className="w-1/3">delete</button>
         </div>
         <div className="mb-4 flex justify-end">
           <button
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded"
+            className="text-[#0094B5] hover:underline"
             onClick={addDelivery}
           >
             + Adicionar Entrega
