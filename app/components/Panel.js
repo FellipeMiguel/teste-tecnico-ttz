@@ -71,13 +71,19 @@ const Panel = ({
           <h3 className="text-gray-400 text-sm">Resultados-Chave</h3>
           <hr className="text-black w-[40%]" />
         </div>
-        {objective.keyResults.map((keyResult, index) => (
-          <KeyResult
-            key={index}
-            {...keyResult}
-            onEdit={() => onEditKeyResult(objective, keyResult)}
-          />
-        ))}
+        {objective.keyResults && objective.keyResults.length > 0 ? (
+          objective.keyResults.map((keyResult, index) => (
+            <KeyResult
+              key={index}
+              {...keyResult}
+              onEdit={() => onEditKeyResult(objective, keyResult)}
+            />
+          ))
+        ) : (
+          <p className="text-sm text-gray-400">
+            Nenhum resultado-chave encontrado.
+          </p>
+        )}
       </div>
       <div className="flex justify-end">
         <button
