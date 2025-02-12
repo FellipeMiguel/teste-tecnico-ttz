@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { PageTitle } from "./components/PageTitle";
+import PageTitle from "./components/PageTitle";
 import Panel from "./components/Panel";
 import CreateObjectiveModal from "./components/CreateObjectiveModal";
 import CreateKeyResultModal from "./components/CreateKeyResultModal";
@@ -15,6 +15,7 @@ import {
   updateResultKey,
   deleteOKR,
 } from "./api";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [objectives, setObjectives] = useState([]);
@@ -133,7 +134,6 @@ export default function Home() {
       setSelectedObjective(null);
       setSelectedKeyResult(null);
 
-      // Atualizar o OKR na API
       await updateOKR(selectedObjective.id, {
         ...selectedObjective,
         keyResults: selectedObjective.keyResults.map((keyResult) =>
@@ -177,56 +177,61 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto p-2">
-      <section className="p-5 bg-gray-50">
-        <PageTitle />
-        <div className="flex justify-end">
-          <button
-            className="flex items-center gap-1 bg-[#0094B5] hover:bg-[#0094b581] text-white py-1 px-3 rounded-md"
-            onClick={() => setIsCreateObjectiveModalOpen(true)}
-          >
-            <span>+</span>
-            Criar objetivo
-          </button>
-        </div>
+    <div className="flex flex-col min-h-screen">
+      <main className="container mx-auto p-2 flex-grow">
+        <section className="p-5 bg-gray-50">
+          <PageTitle />
+          <div className="flex justify-end">
+            <button
+              className="flex items-center gap-1 bg-[#0094B5] hover:bg-[#0094b581] text-white py-1 px-3 rounded-md"
+              onClick={() => setIsCreateObjectiveModalOpen(true)}
+            >
+              <span>+</span>
+              Criar objetivo
+            </button>
+          </div>
 
-        <div className="mt-5 flex justify-between flex-wrap">
-          {objectives.map(
-            (objective) =>
-              objective && (
-                <div key={objective.id} className="w-full md:w-[49%]">
-                  <Panel
-                    objective={{
-                      ...objective,
-                      percent: calculateObjectivePercent(objective.keyResults),
-                    }}
-                    onAddKeyResult={handleAddKeyResult}
-                    onEditKeyResult={handleEditKeyResult}
-                    onDeleteObjective={handleDeleteObjectiveClick}
-                  />
-                </div>
-              )
-          )}
-        </div>
-      </section>
-      <CreateObjectiveModal
-        isOpen={isCreateObjectiveModalOpen}
-        onClose={() => setIsCreateObjectiveModalOpen(false)}
-        onSave={handleAddObjective}
-      />
-      <CreateKeyResultModal
-        isOpen={isCreateKeyResultModalOpen}
-        onClose={() => setIsCreateKeyResultModalOpen(false)}
-        onSave={selectedKeyResult ? handleSaveKeyResult : handleAddKeyResult}
-        keyResult={selectedKeyResult}
-      />
-      <ConfirmationDialog
-        isOpen={isConfirmationDialogOpen}
-        title="Confirmação de Exclusão"
-        message="Você tem certeza que deseja excluir este objetivo? Essa ação não pode ser desfeita."
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
-    </main>
+          <div className="mt-5 flex justify-between flex-wrap">
+            {objectives.map(
+              (objective) =>
+                objective && (
+                  <div key={objective.id} className="w-full md:w-[49%]">
+                    <Panel
+                      objective={{
+                        ...objective,
+                        percent: calculateObjectivePercent(
+                          objective.keyResults
+                        ),
+                      }}
+                      onAddKeyResult={handleAddKeyResult}
+                      onEditKeyResult={handleEditKeyResult}
+                      onDeleteObjective={handleDeleteObjectiveClick}
+                    />
+                  </div>
+                )
+            )}
+          </div>
+        </section>
+        <CreateObjectiveModal
+          isOpen={isCreateObjectiveModalOpen}
+          onClose={() => setIsCreateObjectiveModalOpen(false)}
+          onSave={handleAddObjective}
+        />
+        <CreateKeyResultModal
+          isOpen={isCreateKeyResultModalOpen}
+          onClose={() => setIsCreateKeyResultModalOpen(false)}
+          onSave={selectedKeyResult ? handleSaveKeyResult : handleAddKeyResult}
+          keyResult={selectedKeyResult}
+        />
+        <ConfirmationDialog
+          isOpen={isConfirmationDialogOpen}
+          title="Confirmação de Exclusão"
+          message="Você tem certeza que deseja excluir este objetivo? Essa ação não pode ser desfeita."
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      </main>
+      <Footer />
+    </div>
   );
 }

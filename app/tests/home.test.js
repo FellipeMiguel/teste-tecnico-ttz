@@ -1,7 +1,7 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import Home from "../page";
+import { render, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom"; // para o matcher "toBeInTheDocument"
+import Home from "../page"; // atualize o caminho e o nome do arquivo conforme necessário
 
 describe("Home Component", () => {
   test("renders without crashing", () => {
@@ -9,8 +9,8 @@ describe("Home Component", () => {
     expect(getByText("Criar objetivo")).toBeInTheDocument();
   });
 
-  test("adds a new objective", () => {
-    const { getByText, getByPlaceholderText } = render(<Home />);
+  test("adds a new objective", async () => {
+    const { getByText, getByPlaceholderText, queryByTestId } = render(<Home />);
 
     fireEvent.click(getByText("Criar objetivo"));
     fireEvent.change(getByPlaceholderText("Digite o objetivo"), {
@@ -18,11 +18,15 @@ describe("Home Component", () => {
     });
     fireEvent.click(getByText("Salvar"));
 
-    expect(getByText("Novo Objetivo")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        queryByTestId("objective-title-Novo Objetivo")
+      ).toBeInTheDocument();
+    });
   });
 
-  test("deletes an objective", () => {
-    const { getByText, getByPlaceholderText, queryByText } = render(<Home />);
+  test("deletes an objective", async () => {
+    const { getByText, getByPlaceholderText, queryByTestId } = render(<Home />);
 
     fireEvent.click(getByText("Criar objetivo"));
     fireEvent.change(getByPlaceholderText("Digite o objetivo"), {
@@ -30,13 +34,26 @@ describe("Home Component", () => {
     });
     fireEvent.click(getByText("Salvar"));
 
-    fireEvent.click(getByText("Delete"));
+    await waitFor(() => {
+      expect(
+        queryByTestId("objective-title-Objetivo a Deletar")
+      ).toBeInTheDocument();
+    });
 
-    expect(queryByText("Objetivo a Deletar")).not.toBeInTheDocument();
+    fireEvent.click(queryByTestId("delete-button-Objetivo a Deletar"));
+
+    // Adicionar a confirmação da exclusão
+    fireEvent.click(queryByTestId("confirm-button"));
+
+    await waitFor(() => {
+      expect(
+        queryByTestId("objective-title-Objetivo a Deletar")
+      ).not.toBeInTheDocument();
+    });
   });
 
-  test("adds a new key result", () => {
-    const { getByText, getByPlaceholderText } = render(<Home />);
+  test("adds a new key result", async () => {
+    const { getByText, getByPlaceholderText, queryByTestId } = render(<Home />);
 
     fireEvent.click(getByText("Criar objetivo"));
     fireEvent.change(getByPlaceholderText("Digite o objetivo"), {
@@ -44,12 +61,24 @@ describe("Home Component", () => {
     });
     fireEvent.click(getByText("Salvar"));
 
-    fireEvent.click(getByText("+ Adicionar Resultado-Chave"));
+    await waitFor(() => {
+      expect(
+        queryByTestId("objective-title-Objetivo com Resultado")
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      queryByTestId("add-keyresult-button-Objetivo com Resultado")
+    );
     fireEvent.change(getByPlaceholderText("Digite o resultado-chave"), {
       target: { value: "Novo Resultado-Chave" },
     });
     fireEvent.click(getByText("Salvar"));
 
-    expect(getByText("Novo Resultado-Chave")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        queryByTestId("keyresult-title-Novo Resultado-Chave")
+      ).toBeInTheDocument();
+    });
   });
 });

@@ -24,7 +24,9 @@ const Delivery = ({ name, percent }) => (
 const KeyResult = ({ title, percent, deliveries, onEdit }) => (
   <div className="mb-4">
     <div className="flex justify-between items-center">
-      <h2 className="font-bold mb-2">{title}</h2>
+      <h2 className="font-bold mb-2" data-testid={`keyresult-title-${title}`}>
+        {title}
+      </h2>
       <button className="text-[#0094B5] hover:underline" onClick={onEdit}>
         Editar
       </button>
@@ -55,12 +57,18 @@ const Panel = ({
 
   return (
     <div className="w-full">
-      <div className="bg-white p-5 rounded-md shadow-sm ">
+      <div className="bg-white p-5 rounded-md shadow-sm">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold mb-2">{objective.title}</h2>
+          <h2
+            className="font-bold mb-2"
+            data-testid={`objective-title-${objective.title}`}
+          >
+            {objective.title}
+          </h2>
           <button
             className="text-red-500 hover:underline"
             onClick={() => onDeleteObjective(objective)}
+            data-testid={`delete-button-${objective.title}`}
           >
             Delete
           </button>
@@ -89,6 +97,7 @@ const Panel = ({
         <button
           className="text-[#0094B5] hover:underline mt-1"
           onClick={() => setIsCreateKeyResultModalOpen(true)}
+          data-testid={`add-keyresult-button-${objective.title}`}
         >
           + Adicionar Resultado-Chave
         </button>

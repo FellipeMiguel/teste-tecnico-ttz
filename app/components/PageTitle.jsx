@@ -1,7 +1,7 @@
 import React from "react";
 import { BsLayoutSidebar } from "react-icons/bs";
 
-export const PageTitle = () => {
+const PageTitle = () => {
   return (
     <div className="flex items-center gap-2">
       <BsLayoutSidebar className="text-gray-300" />
@@ -10,3 +10,5 @@ export const PageTitle = () => {
     </div>
   );
 };
+
+export default PageTitle;
