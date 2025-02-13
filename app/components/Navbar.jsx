@@ -1,22 +1,27 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState("light");
 
+  // Carregar tema ao iniciar
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedTheme = localStorage.getItem("theme") || "light";
       setTheme(storedTheme);
       document.documentElement.setAttribute("data-theme", storedTheme);
+      document.documentElement.classList.toggle("dark", storedTheme === "dark");
     }
   }, []);
 
+  // Atualizar tema quando ele mudar
   useEffect(() => {
     if (typeof window !== "undefined") {
       document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.classList.toggle("dark", theme === "dark");
       localStorage.setItem("theme", theme);
     }
   }, [theme]);
@@ -45,7 +50,8 @@ const Navbar = () => {
         >
           <li className="block md:inline-block">
             <a
-              href="/"
+              href="https://br.linkedin.com/in/fellipe-m-dino"
+              target="_blank"
               className="text-white hover:underline block md:inline-block p-2"
             >
               LinkedIn
@@ -53,7 +59,8 @@ const Navbar = () => {
           </li>
           <li className="block md:inline-block">
             <a
-              href="/objectives"
+              href="https://github.com/FellipeMiguel/"
+              target="_blank"
               className="text-white hover:underline block md:inline-block p-2"
             >
               Github
@@ -64,7 +71,11 @@ const Navbar = () => {
               onClick={toggleTheme}
               className="text-white hover:underline block md:inline-block p-2"
             >
-              {theme === "light" ? "Modo Escuro" : "Modo Claro"}
+              {theme === "light" ? (
+                <FaMoon size={20} /> // Ícone de lua para o modo escuro
+              ) : (
+                <FaSun size={20} /> // Ícone de sol para o modo claro
+              )}
             </button>
           </li>
         </ul>

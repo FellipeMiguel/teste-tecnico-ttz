@@ -16,6 +16,7 @@ import {
   deleteOKR,
 } from "./api";
 import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   const [objectives, setObjectives] = useState([]);
@@ -29,7 +30,18 @@ export default function Home() {
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
     useState(false);
   const [objectiveToDelete, setObjectiveToDelete] = useState(null);
+  const [theme, setTheme] = useState("light"); // Estado para controlar o tema
 
+  // Carregar tema ao iniciar
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme") || "light";
+    setTheme(storedTheme);
+    document.documentElement.setAttribute("data-theme", storedTheme);
+    document.body.classList.toggle("dark", storedTheme === "dark");
+    document.body.classList.toggle("light", storedTheme === "light");
+  }, []);
+
+  // Carregar dados dos OKRs e ResultKeys
   useEffect(() => {
     async function fetchData() {
       try {
@@ -52,6 +64,16 @@ export default function Home() {
     }
     fetchData();
   }, []);
+
+  // Função para alternar o tema
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    document.body.classList.toggle("dark", newTheme === "dark");
+    document.body.classList.toggle("light", newTheme === "light");
+    localStorage.setItem("theme", newTheme);
+  };
 
   const calculateAveragePercent = (items) => {
     if (!items || items.length === 0) return 0;
@@ -185,6 +207,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
+      <Navbar />
       <main className="container mx-auto p-2 flex-grow">
         <section className="p-5 bg-gray-50 dark:bg-gray-800 rounded-md shadow-md">
           <PageTitle />
