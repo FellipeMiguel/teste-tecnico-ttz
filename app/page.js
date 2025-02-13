@@ -37,8 +37,15 @@ export default function Home() {
           getOKRs(),
           getResultKeys(),
         ]);
-        setObjectives(okrsResponse.data);
-        setResultKeys(resultKeysResponse.data);
+
+        // Filtrar resultados-chave órfãos
+        const validObjectives = okrsResponse.data;
+        const validResultKeys = resultKeysResponse.data.filter((resultKey) =>
+          validObjectives.some((okr) => okr.id === resultKey.okrId)
+        );
+
+        setObjectives(validObjectives);
+        setResultKeys(validResultKeys);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
@@ -177,9 +184,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
       <main className="container mx-auto p-2 flex-grow">
-        <section className="p-5 bg-gray-50">
+        <section className="p-5 bg-gray-50 dark:bg-gray-800 rounded-md shadow-md">
           <PageTitle />
           <div className="flex justify-end">
             <button

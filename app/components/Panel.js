@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import CreateKeyResultModal from "./CreateKeyResultModal";
 
 const ProgressBar = ({ percent }) => (
-  <div className="flex items-center gap-2">
-    <div className="relative w-full bg-[#c0e3eb] rounded-full h-4">
+  <div className="flex items-center gap-2 relative z-10">
+    <div className="relative w-full bg-gray-300 rounded-full h-4 overflow-hidden">
       <div
-        className="bg-[#0094B5] rounded-full h-4"
+        className="bg-blue-500 rounded-full h-4"
         style={{ width: `${percent}%` }}
       ></div>
-      <span className="absolute top-1/2 left-[50%] transform -translate-y-1/2 -translate-x-1/2 text-xs">
+      <span className="absolute top-1/2 left-[50%] transform -translate-y-1/2 -translate-x-1/2 text-xs z-20 text-black">
         {percent}%
       </span>
     </div>
@@ -16,18 +16,17 @@ const ProgressBar = ({ percent }) => (
 );
 
 const Delivery = ({ name, percent }) => (
-  <li className="text-sm text-gray-400 flex justify-between">
-    {name} <span>{percent}%</span>
+  <li className="text-sm text-gray-500 flex justify-between break-words">
+    <span className="overflow-hidden text-ellipsis">{name}</span>{" "}
+    <span>{percent}%</span>
   </li>
 );
 
 const KeyResult = ({ title, percent, deliveries, onEdit }) => (
   <div className="mb-4">
     <div className="flex justify-between items-center">
-      <h2 className="font-bold mb-2" data-testid={`keyresult-title-${title}`}>
-        {title}
-      </h2>
-      <button className="text-[#0094B5] hover:underline" onClick={onEdit}>
+      <h2 className="font-bold mb-2 break-words text-black">{title}</h2>
+      <button className="text-blue-500 hover:underline" onClick={onEdit}>
         Editar
       </button>
     </div>
@@ -37,7 +36,7 @@ const KeyResult = ({ title, percent, deliveries, onEdit }) => (
         <Delivery key={index} name={delivery.name} percent={delivery.percent} />
       ))}
     </ul>
-    <hr className="my-5" />
+    <hr className="my-5 border-gray-400" />
   </div>
 );
 
@@ -56,19 +55,15 @@ const Panel = ({
   };
 
   return (
-    <div className="w-full">
-      <div className="bg-white p-5 rounded-md shadow-sm">
+    <div className="w-full break-words">
+      <div className="bg-white p-5 rounded-md shadow-sm overflow-hidden">
         <div className="flex justify-between items-center">
-          <h2
-            className="font-bold mb-2"
-            data-testid={`objective-title-${objective.title}`}
-          >
+          <h2 className="font-bold mb-2 break-words text-black">
             {objective.title}
           </h2>
           <button
             className="text-red-500 hover:underline"
             onClick={() => onDeleteObjective(objective)}
-            data-testid={`delete-button-${objective.title}`}
           >
             Delete
           </button>
@@ -95,9 +90,8 @@ const Panel = ({
       </div>
       <div className="flex justify-end">
         <button
-          className="text-[#0094B5] hover:underline mt-1"
+          className="text-blue-500 hover:underline mt-1"
           onClick={() => setIsCreateKeyResultModalOpen(true)}
-          data-testid={`add-keyresult-button-${objective.title}`}
         >
           + Adicionar Resultado-Chave
         </button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom"; // para o matcher "toBeInTheDocument"
-import Home from "../page"; // atualize o caminho e o nome do arquivo conforme necessário
+import "@testing-library/jest-dom";
+import Home from "../page";
 
 describe("Home Component", () => {
   test("renders without crashing", () => {
@@ -42,7 +42,6 @@ describe("Home Component", () => {
 
     fireEvent.click(queryByTestId("delete-button-Objetivo a Deletar"));
 
-    // Adicionar a confirmação da exclusão
     fireEvent.click(queryByTestId("confirm-button"));
 
     await waitFor(() => {
