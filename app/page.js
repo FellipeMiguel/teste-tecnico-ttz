@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
 import PageTitle from "./components/PageTitle";
 import Panel from "./components/Panel";
 import CreateObjectiveModal from "./components/CreateObjectiveModal";
@@ -16,7 +16,6 @@ import {
   deleteOKR,
 } from "./api";
 import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
 
 export default function Home() {
   const [objectives, setObjectives] = useState([]);
@@ -30,64 +29,38 @@ export default function Home() {
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
     useState(false);
   const [objectiveToDelete, setObjectiveToDelete] = useState(null);
-  const [theme, setTheme] = useState("light"); // Estado para controlar o tema
 
-  // Carregar tema ao iniciar
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") || "light";
-    setTheme(storedTheme);
-    document.documentElement.setAttribute("data-theme", storedTheme);
-    document.body.classList.toggle("dark", storedTheme === "dark");
-    document.body.classList.toggle("light", storedTheme === "light");
-  }, []);
-
-  // Carregar dados dos OKRs e ResultKeys
-  useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
         const [okrsResponse, resultKeysResponse] = await Promise.all([
           getOKRs(),
           getResultKeys(),
         ]);
-
-        // Filtrar resultados-chave órfãos
         const validObjectives = okrsResponse.data;
         const validResultKeys = resultKeysResponse.data.filter((resultKey) =>
           validObjectives.some((okr) => okr.id === resultKey.okrId)
         );
-
         setObjectives(validObjectives);
         setResultKeys(validResultKeys);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
-    }
+    };
     fetchData();
   }, []);
 
-  // Função para alternar o tema
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    document.body.classList.toggle("dark", newTheme === "dark");
-    document.body.classList.toggle("light", newTheme === "light");
-    localStorage.setItem("theme", newTheme);
-  };
-
   const calculateAveragePercent = (items) => {
     if (!items || items.length === 0) return 0;
-    const totalPercent = items.reduce((acc, item) => acc + item.percent, 0);
-    return (totalPercent / items.length).toFixed(1);
+    return (
+      items.reduce((acc, item) => acc + item.percent, 0) / items.length
+    ).toFixed(1);
   };
 
   const handleAddObjective = async (newObjective) => {
     try {
-      const response = await createOKR({
-        ...newObjective,
-        keyResults: [],
-      });
-      setObjectives((prevObjectives) => [...prevObjectives, response.data]);
+      const response = await createOKR({ ...newObjective, keyResults: [] });
+      setObjectives([...objectives, response.data]);
       setIsCreateObjectiveModalOpen(false);
     } catch (error) {
       console.error("Erro ao criar OKR:", error);
@@ -103,7 +76,6 @@ export default function Home() {
       };
       const response = await createResultKey(newResultKey);
       const updatedKeyResult = response.data;
-
       const updatedObjectives = objectives.map((obj) =>
         obj.id === objective.id
           ? {
@@ -117,7 +89,6 @@ export default function Home() {
       setObjectives(updatedObjectives);
       setIsCreateKeyResultModalOpen(false);
       setSelectedObjective(null);
-
       await updateOKR(objective.id, {
         ...objective,
         keyResults: objective.keyResults
@@ -143,17 +114,13 @@ export default function Home() {
           calculateAveragePercent(editedKeyResult.deliveries)
         ),
       };
-
       await updateResultKey(editedKeyResult.id, updatedKeyResult);
-
       const updatedObjectives = objectives.map((obj) =>
         obj.id === selectedObjective.id
           ? {
               ...obj,
-              keyResults: obj.keyResults.map((keyResult) =>
-                keyResult.id === selectedKeyResult.id
-                  ? updatedKeyResult
-                  : keyResult
+              keyResults: obj.keyResults.map((kr) =>
+                kr.id === selectedKeyResult.id ? updatedKeyResult : kr
               ),
             }
           : obj
@@ -162,11 +129,10 @@ export default function Home() {
       setIsCreateKeyResultModalOpen(false);
       setSelectedObjective(null);
       setSelectedKeyResult(null);
-
       await updateOKR(selectedObjective.id, {
         ...selectedObjective,
-        keyResults: selectedObjective.keyResults.map((keyResult) =>
-          keyResult.id === selectedKeyResult.id ? updatedKeyResult : keyResult
+        keyResults: selectedObjective.keyResults.map((kr) =>
+          kr.id === selectedKeyResult.id ? updatedKeyResult : kr
         ),
       });
     } catch (error) {
@@ -183,8 +149,8 @@ export default function Home() {
     try {
       if (objectiveToDelete) {
         await deleteOKR(objectiveToDelete.id);
-        setObjectives((prevObjectives) =>
-          prevObjectives.filter(
+        setObjectives(
+          objectives.filter(
             (objective) => objective.id !== objectiveToDelete.id
           )
         );
@@ -201,19 +167,18 @@ export default function Home() {
     setIsConfirmationDialogOpen(false);
   };
 
-  const calculateObjectivePercent = (keyResults) => {
-    return parseFloat(calculateAveragePercent(keyResults));
-  };
+  const calculateObjectivePercent = (keyResults) =>
+    parseFloat(calculateAveragePercent(keyResults));
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="container mx-auto p-2 flex-grow">
-        <section className="p-5 bg-gray-50 dark:bg-gray-800 rounded-md shadow-md">
+        <section className="p-5 bg-primary/10 rounded-md shadow-md">
           <PageTitle />
           <div className="flex justify-end">
             <button
-              className="flex items-center gap-1 bg-[#0094B5] hover:bg-[#0094b581] text-white py-1 px-3 rounded-md"
+              className="flex items-center gap-1 bg-primary hover:bg-primary/80 text-foreground py-1 px-3 rounded-md"
               onClick={() => setIsCreateObjectiveModalOpen(true)}
             >
               <span>+</span>
@@ -242,17 +207,20 @@ export default function Home() {
             )}
           </div>
         </section>
+
         <CreateObjectiveModal
           isOpen={isCreateObjectiveModalOpen}
           onClose={() => setIsCreateObjectiveModalOpen(false)}
           onSave={handleAddObjective}
         />
+
         <CreateKeyResultModal
           isOpen={isCreateKeyResultModalOpen}
           onClose={() => setIsCreateKeyResultModalOpen(false)}
           onSave={selectedKeyResult ? handleSaveKeyResult : handleAddKeyResult}
           keyResult={selectedKeyResult}
         />
+
         <ConfirmationDialog
           isOpen={isConfirmationDialogOpen}
           title="Confirmação de Exclusão"

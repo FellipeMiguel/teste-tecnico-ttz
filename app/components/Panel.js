@@ -5,7 +5,7 @@ const ProgressBar = ({ percent }) => (
   <div className="flex items-center gap-2 relative z-10">
     <div className="relative w-full bg-gray-300 rounded-full h-4 overflow-hidden">
       <div
-        className="bg-blue-500 rounded-full h-4"
+        className="bg-primary rounded-full h-4" // Alterado de bg-blue-500 para bg-primary
         style={{ width: `${percent}%` }}
       ></div>
       <span className="absolute top-1/2 left-[50%] transform -translate-y-1/2 -translate-x-1/2 text-xs z-20 text-black">
@@ -62,7 +62,7 @@ const Panel = ({
             {objective.title}
           </h2>
           <button
-            className="text-red-500 hover:underline"
+            className="text-secondary hover:underline" // Alterado de text-red-500 para text-secondary
             onClick={() => onDeleteObjective(objective)}
           >
             Delete

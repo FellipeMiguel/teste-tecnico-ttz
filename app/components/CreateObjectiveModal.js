@@ -12,15 +12,15 @@ const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-5 rounded-md shadow-lg w-[90%] md:w-[50%] lg:w-[30%]">
+      <div className="bg-background p-5 rounded-md shadow-lg w-[90%] md:w-[50%] lg:w-[30%]">
         <h2 className="text-2xl font-bold mb-4">Criar Novo Objetivo</h2>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className="block text-foreground text-sm font-bold mb-2">
             Nome do Objetivo
           </label>
           <input
             type="text"
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="appearance-none border rounded w-full py-2 px-3 text-foreground bg-background leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Digite o objetivo"
             value={objectiveTitle}
             onChange={(e) => setObjectiveTitle(e.target.value)}
@@ -28,13 +28,13 @@ const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
         </div>
         <div className="flex justify-end gap-3">
           <button
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+            className="bg-secondary/20 hover:bg-secondary/30 text-foreground font-bold py-2 px-4 rounded"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="bg-[#0094B5] hover:bg-[#007B99] text-white font-bold py-2 px-4 rounded"
+            className="bg-primary hover:bg-primary/80 text-white font-bold py-2 px-4 rounded"
             onClick={handleSave}
           >
             Salvar
