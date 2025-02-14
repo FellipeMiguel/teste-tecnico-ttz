@@ -52,12 +52,22 @@ const Navbar = () => {
         >
           <li role="none">
             <a
-              href="/"
+              href="https://br.linkedin.com/in/fellipe-m-dino"
               className="text-foreground hover:underline block md:inline-block p-2"
               role="menuitem"
               aria-label="Visitar LinkedIn"
             >
               LinkedIn
+            </a>
+          </li>
+          <li role="none">
+            <a
+              href="https://github.com/FellipeMiguel"
+              className="text-foreground hover:underline block md:inline-block p-2"
+              role="menuitem"
+              aria-label="Visitar Github"
+            >
+              Github
             </a>
           </li>
           <li role="none">
@@ -74,6 +84,14 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
+      {isOpen && (
+        <button
+          className="absolute top-4 right-4 text-foreground md:hidden"
+          onClick={() => setIsOpen(false)}
+        >
+          ✕
+        </button>
+      )}
     </nav>
   );
 };
