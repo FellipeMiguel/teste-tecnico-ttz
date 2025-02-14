@@ -11,7 +11,7 @@ const CreateKeyResultModal = ({
     percent: "",
     deliveries: [],
   });
-  const [newDelivery, setNewDelivery] = useState({ name: "", percent: "" });
+  const [newDelivey, setnewDelivey] = useState({ name: "", percent: "" });
 
   useEffect(() => {
     setKeyResult(
@@ -28,36 +28,28 @@ const CreateKeyResultModal = ({
     const { name, value } = e.target;
     setKeyResult((prev) => {
       const updatedDeliveries = [...prev.deliveries];
-      const newValue =
-        name === "percent"
-          ? value === ""
-            ? ""
-            : Math.max(0, Math.min(100, Number(value)))
-          : value;
-      updatedDeliveries[index] = {
-        ...updatedDeliveries[index],
-        [name]: newValue,
-      };
+      updatedDeliveries[index] = { ...updatedDeliveries[index], [name]: value };
       return { ...prev, deliveries: updatedDeliveries };
     });
   };
 
   const addDelivery = () => {
-    const validPercent =
-      newDelivery.percent === ""
-        ? ""
-        : Math.max(0, Math.min(100, Number(newDelivery.percent)));
-    setKeyResult((prev) => ({
-      ...prev,
-      deliveries: [
-        ...prev.deliveries,
-        { ...newDelivery, percent: validPercent },
-      ],
-    }));
-    setNewDelivery({ name: "", percent: "" });
+    if (newDelivey.name.trim() && newDelivey.percent.trim()) {
+      setKeyResult((prev) => ({
+        ...prev,
+        deliveries: [
+          ...prev.deliveries,
+          {
+            name: newDelivey.name,
+            percent: parseFloat(newDelivey.percent),
+          },
+        ],
+      }));
+      setnewDelivey({ name: "", percent: "" });
+    }
   };
 
-  const deleteDelivery = (index) => {
+  const deletarEntrega = (index) => {
     setKeyResult((prev) => ({
       ...prev,
       deliveries: prev.deliveries.filter((_, i) => i !== index),
@@ -65,8 +57,23 @@ const CreateKeyResultModal = ({
   };
 
   const handleSave = () => {
-    onSave(keyResult);
-    setKeyResult({ title: "", percent: "", deliveries: [] });
+    const entregasValidas = keyResult.deliveries.map((d) => ({
+      ...d,
+      percent: d.percent || 0,
+    }));
+
+    const media =
+      entregasValidas.length > 0
+        ? entregasValidas.reduce((acc, d) => acc + d.percent, 0) /
+          entregasValidas.length
+        : 0;
+
+    onSave({
+      ...keyResult,
+      percent: media,
+      deliveries: entregasValidas,
+    });
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -79,7 +86,6 @@ const CreateKeyResultModal = ({
             ? "Editar Resultado-Chave"
             : "Criar Novo Resultado-Chave"}
         </h2>
-
         <div className="mb-4">
           <input
             type="text"
@@ -90,43 +96,62 @@ const CreateKeyResultModal = ({
             onChange={handleChange}
           />
         </div>
-
-        {keyResult.deliveries.map((delivery, index) => (
+        {keyResult.deliveries.map((entrega, index) => (
           <div key={index} className="mb-4 flex gap-1 items-center">
             <input
               type="text"
               name="name"
               className="appearance-none border rounded w-full py-2 px-3 text-foreground bg-background leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Digite a entrega"
-              value={delivery.name}
+              value={entrega.name}
               onChange={(e) => handleDeliveryChange(index, e)}
             />
             <input
               type="number"
               name="percent"
               className="appearance-none border rounded py-2 px-3 text-foreground bg-background leading-tight focus:outline-none focus:shadow-outline w-1/3"
-              placeholder="Valor %"
-              value={delivery.percent}
+              placeholder="Valor%"
+              value={entrega.percent}
               onChange={(e) => handleDeliveryChange(index, e)}
+              min="0"
+              max="100"
             />
             <button
               className="w-1/3 bg-secondary hover:bg-secondary/80 text-white rounded py-2 px-3"
-              onClick={() => deleteDelivery(index)}
+              onClick={() => deletarEntrega(index)}
             >
-              Delete
+              Deletar
             </button>
           </div>
         ))}
-
-        <div className="mb-4 flex justify-end">
+        <div className="mb-4 flex gap-1 items-center">
+          <input
+            type="text"
+            placeholder="Nova entrega"
+            value={newDelivey.name}
+            onChange={(e) =>
+              setnewDelivey({ ...newDelivey, name: e.target.value })
+            }
+            className="appearance-none border rounded w-full py-2 px-3 text-foreground bg-background leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <input
+            type="number"
+            placeholder="Valor%"
+            value={newDelivey.percent}
+            onChange={(e) =>
+              setnewDelivey({ ...newDelivey, percent: e.target.value })
+            }
+            min="0"
+            max="100"
+            className="appearance-none border rounded py-2 px-3 text-foreground bg-background leading-tight focus:outline-none focus:shadow-outline w-1/3"
+          />
           <button
-            className="text-blue-400 hover:underline"
+            className="w-1/3 bg-secondary hover:bg-secondary/80 text-white rounded py-2 px-3"
             onClick={addDelivery}
           >
-            + Adicionar Entrega
+            Adicionar
           </button>
         </div>
-
         <div className="flex justify-end gap-3">
           <button
             className="bg-secondary/20 hover:bg-secondary/30 text-foreground font-bold py-2 px-4 rounded"

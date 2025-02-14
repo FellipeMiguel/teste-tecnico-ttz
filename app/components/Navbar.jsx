@@ -20,14 +20,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-primary p-4 z-50 relative shadow-md" aria-label="Navegação principal">
+    <nav
+      className="bg-primary p-4 z-50 relative shadow-md"
+      aria-label="Navegação principal"
+    >
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-foreground text-lg font-bold">
           <h1>
             América <span className="text-secondary">Senior</span>
           </h1>
         </div>
-        
+
         <div className="block md:hidden">
           <button
             aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
@@ -61,7 +64,10 @@ const Navbar = () => {
             <button
               onClick={toggleTheme}
               className="text-foreground hover:underline block md:inline-block p-2"
-              aria-label={`Alternar para tema ${theme === "light" ? "escuro" : "claro"}`}
+              aria-label={`Alternar para tema ${
+                theme === "light" ? "escuro" : "claro"
+              }`}
+              data-testid="theme-toggle-button"
             >
               {theme === "light" ? <FaMoon size={20} /> : <FaSun size={20} />}
             </button>

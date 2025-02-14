@@ -36,6 +36,7 @@ const ConfirmationDialog = ({
             className="bg-secondary hover:bg-secondary/80 text-white font-bold py-2 px-4 rounded"
             onClick={onConfirm}
             aria-label="Confirmar ação"
+            data-testid="confirm-button"
           >
             Confirmar
           </button>
