@@ -11,14 +11,15 @@ const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div
+      data-testid="objective-modal"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
       <div className="bg-background p-5 rounded-md shadow-lg w-[90%] md:w-[50%] lg:w-[30%]">
         <h2 className="text-2xl font-bold mb-4">Criar Novo Objetivo</h2>
         <div className="mb-4">
-          <label className="block text-foreground text-sm font-bold mb-2">
-            Nome do Objetivo
-          </label>
           <input
+            data-testid="objective-input"
             type="text"
             className="appearance-none border rounded w-full py-2 px-3 text-foreground bg-background leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Digite o objetivo"
@@ -34,6 +35,7 @@ const CreateObjectiveModal = ({ isOpen, onClose, onSave }) => {
             Cancelar
           </button>
           <button
+            data-testid="save-objective-button"
             className="bg-primary hover:bg-primary/80 text-white font-bold py-2 px-4 rounded"
             onClick={handleSave}
           >

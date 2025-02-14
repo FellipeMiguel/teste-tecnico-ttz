@@ -120,7 +120,7 @@ const CreateKeyResultModal = ({
 
         <div className="mb-4 flex justify-end">
           <button
-            className="text-primary hover:underline"
+            className="text-blue-400 hover:underline"
             onClick={addDelivery}
           >
             + Adicionar Entrega

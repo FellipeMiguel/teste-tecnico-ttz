@@ -60,6 +60,7 @@ const Navbar = () => {
             <button
               onClick={toggleTheme}
               className="text-foreground hover:underline block md:inline-block p-2"
+              data-testid="theme-toggle-button"
             >
               {theme === "light" ? <FaMoon size={20} /> : <FaSun size={20} />}
             </button>

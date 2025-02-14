@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  swcMinify: true, // habilitar minificação SWC
+  swcMinify: true,
   experimental: {
-    swcLoader: true, // usar SWC como loader
-    swcMinify: true, // usar SWC para minificação
+    swcLoader: true,
+    swcMinify: true,
   },
 };
 
