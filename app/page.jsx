@@ -50,11 +50,17 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const calculateAveragePercent = (items) => {
-    if (!items || items.length === 0) return 0;
-    return (
-      items.reduce((acc, item) => acc + item.percent, 0) / items.length
-    ).toFixed(1);
+  const calculateAveragePercent = (keyResults = []) => {
+    if (!keyResults.length) return 0;
+
+    const validResults = keyResults.filter(
+      (kr) => typeof kr.percent === "number" && !isNaN(kr.percent)
+    );
+
+    if (!validResults.length) return 0;
+
+    const total = validResults.reduce((sum, kr) => sum + kr.percent, 0);
+    return (total / validResults.length).toFixed(1);
   };
 
   const handleAddObjective = async (newObjective) => {

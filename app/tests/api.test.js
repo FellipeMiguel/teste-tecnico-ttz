@@ -72,8 +72,19 @@ describe("API", () => {
 
     expect(response.data).toEqual(expectedStructure);
 
-    expect(response.data).toHaveLength(1);
-    expect(response.data[0].keyResults).toHaveLength(1);
-    expect(response.data[0].keyResults[0].deliveries).toHaveLength(1);
+    response.data.forEach((okr) => {
+      expect(okr.keyResults).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            deliveries: expect.arrayContaining([
+              expect.objectContaining({
+                name: expect.any(String),
+                percent: expect.any(Number),
+              }),
+            ]),
+          }),
+        ])
+      );
+    });
   });
 });

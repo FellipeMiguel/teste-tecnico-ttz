@@ -2,21 +2,29 @@ import React, { useState } from "react";
 import CreateKeyResultModal from "./CreateKeyResultModal";
 
 const ProgressBar = ({ percent }) => (
-  <div
-    role="progressbar"
-    aria-valuenow={percent}
-    aria-valuemin="0"
-    aria-valuemax="100"
-    className="flex items-center gap-2 relative z-10"
-  >
-    <div className="relative w-full bg-gray-300 rounded-full h-4 overflow-hidden">
-      <div
-        className="bg-primary rounded-full h-4"
-        style={{ width: `${percent}%` }}
-      />
-    </div>
+  <div className="relative w-full h-6 bg-gray-200 rounded-full overflow-hidden">
+    <div
+      className="absolute h-full bg-primary transition-all duration-500"
+      style={{ width: `${percent}%` }}
+    />
+    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm font-medium text-foreground">
+      {percent.toFixed(1)}%
+    </span>
   </div>
 );
+
+const calculateAveragePercent = (items = []) => {
+  if (!items.length) return 0;
+
+  const validItems = items.filter(
+    (item) => typeof item.percent === "number" && !isNaN(item.percent)
+  );
+
+  if (!validItems.length) return 0;
+
+  const total = validItems.reduce((sum, item) => sum + item.percent, 0);
+  return total / validItems.length;
+};
 
 const KeyResult = ({ title, percent, deliveries, onEdit }) => (
   <div className="mb-4">
@@ -74,7 +82,7 @@ const Panel = ({
             Excluir
           </button>
         </div>
-        <ProgressBar percent={objective.percent} />
+        <ProgressBar percent={calculateAveragePercent(objective.keyResults)} />
         <div className="flex items-center justify-between py-3">
           <hr className="text-black w-[27%] lg:w-[36%]" />
           <h3 className="text-gray-400 md:text-sm text-[12px]">
@@ -87,6 +95,7 @@ const Panel = ({
             <KeyResult
               key={index}
               {...keyResult}
+              percent={calculateAveragePercent(keyResult.deliveries)}
               onEdit={() => onEditKeyResult(objective, keyResult)}
             />
           ))
