@@ -64,6 +64,8 @@ Um sistema simples para a criação e gestão de OKRs (Objectives and Key Result
 
 ![Modal de Confirmação](screenshots/delete.png)
 
+## Funcionalidades
+
 - [x] Criação de OKRs
 - [x] Criação de Resultados-Chave
 - [x] Adicionar Entregas aos Resultados-Chave
