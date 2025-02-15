@@ -76,9 +76,11 @@ const Panel = ({
         </div>
         <ProgressBar percent={objective.percent} />
         <div className="flex items-center justify-between py-3">
-          <hr className="text-black w-[40%]" />
-          <h3 className="text-gray-400 text-sm">Resultados-Chave</h3>
-          <hr className="text-black w-[40%]" />
+          <hr className="text-black w-[27%] lg:w-[36%]" />
+          <h3 className="text-gray-400 md:text-sm text-[12px]">
+            Resultados-Chave
+          </h3>
+          <hr className="text-black w-[27%] md:w-[36%]" />
         </div>
         {objective.keyResults && objective.keyResults.length > 0 ? (
           objective.keyResults.map((keyResult, index) => (

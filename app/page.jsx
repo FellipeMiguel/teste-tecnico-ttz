@@ -216,7 +216,11 @@ export default function Home() {
 
         <CreateKeyResultModal
           isOpen={isCreateKeyResultModalOpen}
-          onClose={() => setIsCreateKeyResultModalOpen(false)}
+          onClose={() => {
+            setIsCreateKeyResultModalOpen(false);
+            setSelectedObjective(null);
+            setSelectedKeyResult(null);
+          }}
           onSave={selectedKeyResult ? handleSaveKeyResult : handleAddKeyResult}
           keyResult={selectedKeyResult}
         />

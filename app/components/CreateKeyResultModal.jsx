@@ -14,10 +14,20 @@ const CreateKeyResultModal = ({
   const [newDelivey, setnewDelivey] = useState({ name: "", percent: "" });
 
   useEffect(() => {
-    setKeyResult(
-      initialKeyResult || { title: "", percent: "", deliveries: [] }
-    );
-  }, [initialKeyResult]);
+    if (isOpen) {
+      setKeyResult(
+        initialKeyResult || { title: "", percent: "", deliveries: [] }
+      );
+      setnewDelivey({ name: "", percent: "" });
+    }
+  }, [isOpen, initialKeyResult]);
+
+  useEffect(() => {
+    return () => {
+      setKeyResult({ title: "", percent: "", deliveries: [] });
+      setnewDelivey({ name: "", percent: "" });
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
